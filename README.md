@@ -1,46 +1,35 @@
-<p align="center">
-  <img src="assets/header.svg" alt="Abdullah Misar — Software engineering, web applications, and practical AI tools" width="100%" />
+<a href="https://www.abmisar.site/">
+  <img src="assets/cover.png" alt="Abdullah Misar — I build things people use. Software Engineer at Bahr AI. Jeddah, Saudi Arabia." width="100%" />
+</a>
+
+<p>
+  <a href="https://www.abmisar.site/"><strong>PORTFOLIO ↗</strong></a> &nbsp; / &nbsp;
+  <a href="https://www.linkedin.com/in/abdullah-misar/">LINKEDIN ↗</a> &nbsp; / &nbsp;
+  <a href="mailto:abdullahwalid18@gmail.com">EMAIL ↗</a>
 </p>
 
-<p align="center">
-  <a href="https://www.abmisar.site/">Portfolio</a> &nbsp; / &nbsp;
-  <a href="https://www.linkedin.com/in/abdullah-misar">LinkedIn</a> &nbsp; / &nbsp;
-  <a href="https://github.com/Abmisar?tab=repositories">Repositories</a>
+### Software Engineer at Bahr AI · Leader, GDG on Campus UJ
+
+I build products across interfaces, APIs, and the systems underneath them: learning platforms, healthcare workflows, session replay, and Arabic-first client experiences. Based in Jeddah. Also studying Software Engineering at the University of Jeddah, with expected graduation in 2027.
+
+## Selected work
+
+<p>
+  <a href="https://www.abmisar.site/work/lelean"><img src="assets/lelean.png" alt="Lelean Academy — full-stack development of an Arabic-first learning platform. In development. View case study." width="49%" /></a>
+  <a href="https://www.abmisar.site/work/minzar"><img src="assets/minzar.png" alt="Minzar — authentication and session integration for a team-built session-replay platform. View case study." width="49%" /></a>
+  <a href="https://www.abmisar.site/work/behavior-compass"><img src="assets/compass.png" alt="Behavior Compass — assessment journeys, Arabic reports, and administration, built with a team. View case study." width="49%" /></a>
+  <a href="https://www.abmisar.site/work/mmp"><img src="assets/mmp.png" alt="MM&amp;P — bilingual website, motion, and editorial CMS, built with a team. Interface preview includes illustrative artwork. View case study." width="49%" /></a>
 </p>
 
-## Hi, I'm Abdullah
+- **[Lelean Academy](https://www.abmisar.site/work/lelean)** — Learner and admin workflows, course progress, discussions, and protected media. Full-stack development; in development.
+- **[Minzar](https://www.abmisar.site/work/minzar)** — Authentication and sessions across a Next.js console, .NET services, and a Bun/Elysia gateway. Team platform.
+- **[Behavior Compass](https://www.abmisar.site/work/behavior-compass)** — Assessment journeys, Arabic PDF reporting, and company administration, integrating the client's scoring API. Built with a team.
+- **[MM&P](https://www.abmisar.site/work/mmp)** — Bilingual law-firm website with synchronized 3D motion and a GitHub-backed editorial CMS. Built with a team.
 
-I'm a software engineering student at the **University of Jeddah**, based in Jeddah, Saudi Arabia. I build web applications, backend systems, and practical AI tools, with an interest in how data moves from storage to something people can use.
+Also: **[Mueenak](https://www.abmisar.site/work/mueenak)**, backend and database design for prescription-refill workflows within a team; **[MASS](https://www.abmisar.site/work/mass)**, website design and development for a Saudi security company.
 
-My projects span task-management tools for AI hosts, local search over lecture slides, and web applications for campus life. I've also explored bioinformatics through **KAUST Academy**, working with Python, Linux, and RNA-seq analysis pipelines.
+## Beyond the build
 
-## Selected projects
+I lead **GDG on Campus, University of Jeddah** — **160+ members across 10 departments**. Our **DocuPilot team won first place** at the AI Innovation Bootcamp by GDG on Campus UJ × StartSmart. I also completed KAUST Academy's Advanced Bioinformatics program, contributing to team RNA-seq research.
 
-### [StudyMate MCP](https://github.com/Abmisar/studymate-mcp)
-A small MCP server that lets an AI host list, add, and complete study tasks. Built as a readable teaching demo with typed tools, input validation, and a test client.
-
-`Python` · `Model Context Protocol` · `Local JSON storage`
-
-### [Slides RAG](https://github.com/Abmisar/Slides-RAG)
-A local study assistant for PDF lecture slides. Extracts and indexes slide content, retrieves relevant passages, and answers questions using a local language model.
-
-`Python` · `Streamlit` · `FAISS` · `sentence-transformers` · `Ollama`
-
-### [UJ Campus Finder](https://github.com/Abmisar/UJ-Campus-Finder)
-A team-built lost-and-found application for the University of Jeddah. I contributed as a **backend developer** to a project supporting item reports, claim requests, and administration workflows.
-
-`JavaScript` · `Node.js` · `Express` · `MySQL`
-
-## Tools I work with
-
-| Area | Technologies |
-| :--- | :--- |
-| Languages | TypeScript, JavaScript, Python, SQL, Java |
-| Web | React, Next.js, HTML, CSS, Tailwind CSS, EJS |
-| Backend & databases | Node.js, Express, REST APIs, PostgreSQL, MySQL |
-| AI & data | MCP, Streamlit, FAISS, Ollama, Pandas, NumPy |
-| Development | Git, GitHub, Linux |
-
-## Connect
-
-Find more of my work on [my portfolio](https://www.abmisar.site/) or connect with me on [LinkedIn](https://www.linkedin.com/in/abdullah-misar).
+**Working with** TypeScript · React / Next.js · Node.js / Bun · PostgreSQL · C# / .NET · Auth0 · Azure
