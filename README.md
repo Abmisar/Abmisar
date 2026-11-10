@@ -33,3 +33,10 @@ Also: **[Mueenak](https://www.abmisar.site/work/mueenak)**, backend and database
 I lead **GDG on Campus, University of Jeddah** — **160+ members across 10 departments**. Our **DocuPilot team won first place** at the AI Innovation Bootcamp by GDG on Campus UJ × StartSmart. I also completed KAUST Academy's Advanced Bioinformatics program, contributing to team RNA-seq research.
 
 **Working with** TypeScript · React / Next.js · Node.js / Bun · PostgreSQL · C# / .NET · Auth0 · Azure
+
+## GitHub activity
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg" />
+  <img src="assets/activity-light.svg" alt="A 3D calendar of my GitHub contributions over the past year, with current and best streaks, highest daily contributions, and daily average." width="100%" />
+</picture>

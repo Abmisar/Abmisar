@@ -2,27 +2,15 @@
 """Render a public GitHub contribution calendar with the standard library."""
 
 import argparse
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from html import escape
-import json
+from html.parser import HTMLParser
 import os
 from pathlib import Path
+import re
+from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-
-QUERY = """
-query($login: String!) {
-  user(login: $login) {
-    contributionsCollection {
-      contributionCalendar {
-        weeks {
-          contributionDays { date weekday contributionCount contributionLevel }
-        }
-      }
-    }
-  }
-}
-"""
 
 THEMES = {
     "dark": {
@@ -39,30 +27,68 @@ THEMES = {
 LEVELS = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"]
 
 
-def fetch_calendar(username, token):
+class PublicCalendar(HTMLParser):
+    """Read exact counts from GitHub's accessible contribution tooltips."""
+
+    def __init__(self):
+        super().__init__()
+        self.tiles = {}
+        self.tooltips = {}
+        self.active_tooltip = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if attrs.get("data-date") and "data-level" in attrs:
+            self.tiles[attrs["id"]] = attrs
+        if tag == "tool-tip" and attrs.get("for"):
+            self.active_tooltip = attrs["for"]
+            self.tooltips[self.active_tooltip] = ""
+
+    def handle_data(self, text):
+        if self.active_tooltip:
+            self.tooltips[self.active_tooltip] += text
+
+    def handle_endtag(self, tag):
+        if tag == "tool-tip":
+            self.active_tooltip = None
+
+
+def fetch_calendar(username):
+    # Fetch without credentials: only counts already visible on the public
+    # profile are used. This also supports manual updates without a token.
     request = Request(
-        "https://api.github.com/graphql",
-        data=json.dumps({"query": QUERY, "variables": {"login": username}}).encode(),
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",
-                 "User-Agent": "Abmisar-profile-activity"},
+        f"https://github.com/users/{quote(username, safe='')}/contributions",
+        headers={"Accept-Language": "en-US", "User-Agent": "Abmisar-profile-activity"},
     )
     with urlopen(request, timeout=45) as response:
-        result = json.load(response)
-    if result.get("errors"):
-        raise RuntimeError("GitHub GraphQL: " + "; ".join(e["message"] for e in result["errors"]))
-    user = result["data"]["user"]
-    if not user:
-        raise RuntimeError(f"GitHub user not found: {username}")
-    return user["contributionsCollection"]["contributionCalendar"]["weeks"]
+        html = response.read().decode("utf-8")
+    parser = PublicCalendar()
+    parser.feed(html)
+    if not parser.tiles:
+        raise ValueError("GitHub's public calendar contains no contribution days")
+    days = []
+    for tile_id, tile in parser.tiles.items():
+        tooltip = parser.tooltips.get(tile_id, "").strip()
+        match = re.match(r"^(No|[\d,]+) contributions?\b", tooltip)
+        if not match:
+            raise ValueError(f"Cannot read contribution count for {tile['data-date']}")
+        count = 0 if match[1] == "No" else int(match[1].replace(",", ""))
+        day_date = date.fromisoformat(tile["data-date"])
+        days.append({"date": tile["data-date"], "weekday": (day_date.weekday() + 1) % 7,
+                     "contributionCount": count,
+                     "contributionLevel": LEVELS[int(tile["data-level"])]})
+    return [{"contributionDays": days}]
 
 
 def calendar_days(weeks, today):
     days = []
     seen = set()
-    for week_index, week in enumerate(weeks):
+    oldest = today - timedelta(days=364)
+    first_sunday = oldest - timedelta(days=(oldest.weekday() + 1) % 7)
+    for week in weeks:
         for day in week["contributionDays"]:
             day_date = date.fromisoformat(day["date"])
-            if day_date > today:
+            if day_date > today or day_date < oldest:
                 continue
             if day_date in seen:
                 raise ValueError("Contribution dates must be unique")
@@ -70,10 +96,11 @@ def calendar_days(weeks, today):
             count = day["contributionCount"]
             if not isinstance(count, int) or count < 0:
                 raise ValueError("Invalid contribution count")
-            days.append({**day, "week": week_index, "parsed_date": day_date})
+            days.append({**day, "week": (day_date - first_sunday).days // 7,
+                         "parsed_date": day_date})
     days.sort(key=lambda day: day["parsed_date"])
-    if not days or days[-1]["parsed_date"] != today:
-        raise ValueError("Calendar must include the current UTC date")
+    if len(days) != 365 or days[-1]["parsed_date"] != today:
+        raise ValueError("Calendar must contain all 365 days through the current UTC date")
     if any((right["parsed_date"] - left["parsed_date"]).days != 1
            for left, right in zip(days, days[1:])):
         raise ValueError("Contribution dates must be consecutive")
@@ -173,11 +200,8 @@ def main():
     parser.add_argument("--user", default=os.environ.get("GITHUB_USER", "Abmisar"))
     parser.add_argument("--output", type=Path, default=Path("assets"))
     args = parser.parse_args()
-    token = os.environ.get("GH_TOKEN")
-    if not token:
-        parser.error("GH_TOKEN is required; GitHub Actions supplies its repository token")
     today = datetime.now(timezone.utc).date()
-    days = calendar_days(fetch_calendar(args.user, token), today)
+    days = calendar_days(fetch_calendar(args.user), today)
     stats = statistics(days)
     # Prepare both images before touching the last successful output.
     images = {name: render(days, stats, args.user, name) for name in THEMES}

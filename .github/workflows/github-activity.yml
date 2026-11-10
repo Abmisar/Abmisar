@@ -27,7 +27,6 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Generate contribution charts
         env:
-          GH_TOKEN: ${{ github.token }}
           GITHUB_USER: ${{ github.repository_owner }}
         run: python3 scripts/github_activity.py
       - name: Publish changed charts
